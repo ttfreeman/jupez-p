@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>jupes</h3>
+<a href="/jupes/add" class="btn btn-success btn-sm">
+  <i class="fas fa-plus"></i>
+  Add jupe
+</a>
+
+{% for jupe in jupes %}
+<div class="media">
+  <a href="/jupes/{{jupe.id}}">
+    {% if jupe.imageUrl %}
+    <img src="{{jupe.imageUrl}}">
+    {% else %}
+    <img src="http://placekitten.com/g/128/192">
+    {% endif %}
+    <div class="media-body">
+      <h4>{{jupe.title}}</h4>
+      <p>{{jupe.author}}</p>
+    </div>
+  </a>
+</div>
+{% else %}
+<p>No jupes found</p>
+{% endfor %}
+
+{% if next_page_token %}
+<nav>
+  <ul class="pager">
+    <li><a href="?page_token={{next_page_token}}">More</a></li>
+  </ul>
+</nav>
+{% endif %}
+
+{% endblock %}

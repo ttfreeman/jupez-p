@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>jupe</h3>
+
+<div class="btn-group">
+  <a href="/jupes/{{jupe.id}}/edit" class="btn btn-primary btn-sm">
+    <i class="fas fa-edit"></i>
+    Edit jupe
+  </a>
+  <a href="/jupes/{{jupe.id}}/delete" class="btn btn-danger btn-sm">
+    <i class="fas fa-trash"></i>
+    Delete jupe
+  </a>
+</div>
+
+<div class="media">
+    {% if jupe.imageUrl %}
+    <img class="mr-3" src="{{jupe.imageUrl}}">
+    {% else %}
+    <img class="mr-3" src="http://placekitten.com/g/128/192">
+    {% endif %}
+  <div class="media-body">
+    <h4 class="mt-0">
+      {{jupe.title}}
+      <small>{{jupe.publishedDate}}</small>
+    </h4>
+    <h5 >By {{jupe.author|default('Unknown', True)}}</h5>
+    <p >{{jupe.description}}</p>
+  </div>
+</div>
+
+{% endblock %}
