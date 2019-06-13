@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, current_app
 import logging
 
 
@@ -15,8 +15,7 @@ def create_app(config, debug=False, testing=False):
 
     # Setup the data model.
     with app.app_context():
-        from . import mongodb
-        model = mongodb
+        model = get_model()
         model.init_app(app)
 
     # Register the jupez CRUD blueprint
@@ -36,3 +35,19 @@ def create_app(config, debug=False, testing=False):
         """.format(e), 500
 
     return app
+
+
+def get_model():
+    model_backend = current_app.config['DATA_BACKEND']
+    if model_backend == 'cloudsql':
+        from . import model_cloudsql
+        model = model_cloudsql
+    elif model_backend == 'mongodb':
+        from . import mongodb
+        model = mongodb
+    else:
+        raise ValueError(
+            "No appropriate databackend configured. "
+            "Please specify datastore, cloudsql, or mongodb")
+
+    return model
