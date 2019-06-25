@@ -34,7 +34,7 @@ def upload_file(file_stream, filename, content_type):
     _check_extension(filename, current_app.config['ALLOWED_EXTENSIONS'])
     filename = _safe_filename(filename)
     client = storage.Client.from_service_account_json(
-    "/home/ttfreeman/keys/jupez-p-57965b722d31.json"
+    "D:\WinDev\keys\jupez-p-190b34beb77b.json"
 )
     bucket = client.bucket(current_app.config['CLOUD_STORAGE_BUCKET'])
     blob = bucket.blob(filename)

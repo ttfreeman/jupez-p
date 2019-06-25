@@ -1,5 +1,7 @@
+from jupez import get_model
 from flask import Blueprint, current_app, request, render_template, redirect, url_for
-from . import mongodb, storage
+
+from . import storage
 
 crud = Blueprint('crud', __name__)
 
@@ -29,14 +31,14 @@ def list():
     if token:
         token.encode('utf-8')
 
-    jupes, next_page_token = mongodb.list(cursor=token)
+    jupes, next_page_token = get_model().list(cursor=token)
 
     return render_template("list.html", jupes=jupes, next_page_token=next_page_token)
 
 
 @crud.route("/<id>")
 def view(id):
-    jupe = mongodb.read(id)
+    jupe = get_model().read(id)
     return render_template("view.html", jupe=jupe)
 
 
@@ -49,7 +51,7 @@ def add():
         if image_url:
             data['imageUrl'] = image_url
 
-        jupe = mongodb.create(data)
+        jupe = get_model().create(data)
         return redirect(url_for('.view', id=jupe['id']))
 
     return render_template('form.html', action='Add', jupe={})
@@ -57,7 +59,7 @@ def add():
 
 @crud.route('/<id>/edit', methods=['GET', 'POST'])
 def edit(id):
-    jupe = mongodb.read(id)
+    jupe = get_model().read(id)
 
     if request.method == 'POST':
         data = request.form.to_dict(flat=True)
@@ -66,7 +68,7 @@ def edit(id):
         if image_url:
             data['imageUrl'] = image_url
 
-        jupe = mongodb.update(data, id)
+        jupe = get_model().update(data, id)
 
         return redirect(url_for('.view', id=jupe['id']))
 
@@ -75,5 +77,5 @@ def edit(id):
 
 @crud.route("/<id>/delete")
 def delete(id):
-    mongodb.delete(id)
+    get_model().delete(id)
     return redirect(url_for('.list'))
